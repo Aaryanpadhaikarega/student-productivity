@@ -1,4 +1,4 @@
-name: Deploy Static Content to Pages
+name: Deploy StudyFlow
 
 on:
   push:
@@ -14,10 +14,6 @@ concurrency:
   group: "pages"
   cancel-in-progress: false
 
-env:
-  # This removes the deprecation warning and uses the latest Node.js runner
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 jobs:
   deploy:
     environment:
@@ -29,7 +25,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v5
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
