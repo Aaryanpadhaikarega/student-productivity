@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyFlow - Student Productivity Manager</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">📚</span>
+                    <span class="logo-text">StudyFlow</span>
+                </div>
+                <div class="theme-toggle">
+                    <button class="theme-btn" id="themeToggle" title="Toggle dark mode">
+                        <span class="theme-icon">🌙</span>
+                    </button>
+                </div>
+                <div class="header-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">📋</div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="totalTasks">0</div>
+                            <div class="stat-label">Tasks</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✓</div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="completedTasks">0</div>
+                            <div class="stat-label">Completed</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🔥</div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="currentStreak">0</div>
+                            <div class="stat-label">Streak</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <div class="nav-tabs">
+                <button class="nav-tab active" data-tab="dashboard">
+                    <span class="tab-icon">📊</span>
+                    <span class="tab-text">Dashboard</span>
+                </button>
+                <button class="nav-tab" data-tab="tasks">
+                    <span class="tab-icon">✓</span>
+                    <span class="tab-text">Tasks</span>
+                </button>
+                <button class="nav-tab" data-tab="schedule">
+                    <span class="tab-icon">📅</span>
+                    <span class="tab-text">Schedule</span>
+                </button>
+                <button class="nav-tab" data-tab="goals">
+                    <span class="tab-icon">🎯</span>
+                    <span class="tab-text">Goals</span>
+                </button>
+                <button class="nav-tab" data-tab="analytics">
+                    <span class="tab-icon">📈</span>
+                    <span class="tab-text">Analytics</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Dashboard Tab -->
+            <section id="dashboard" class="content-section active">
+                <div class="grid grid-2">
+                    <!-- Today's Summary -->
+                    <div class="card card-glow">
+                        <div class="card-header">
+                            <div class="header-title-group">
+                                <div class="card-title">Today's Summary</div>
+                                <div class="card-subtitle" id="todayDate"></div>
+                            </div>
+                            <div class="card-icon">📅</div>
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stat-box stat-box-blue">
+                                <div class="stat-box-icon">📝</div>
+                                <div class="stat-box-value" id="todayTasks">0</div>
+                                <div class="stat-box-label">Tasks Today</div>
+                            </div>
+                            <div class="stat-box stat-box-green">
+                                <div class="stat-box-icon">✅</div>
+                                <div class="stat-box-value" id="todayCompleted">0</div>
+                                <div class="stat-box-label">Completed</div>
+                            </div>
+                            <div class="stat-box stat-box-purple">
+                                <div class="stat-box-icon">📊</div>
+                                <div class="stat-box-value" id="todayProgress">0%</div>
+                                <div class="stat-box-label">Progress</div>
+                            </div>
+                            <div class="stat-box stat-box-orange">
+                                <div class="stat-box-icon">⏱️</div>
+                                <div class="stat-box-value" id="todayFocus">0h</div>
+                                <div class="stat-box-label">Focus Time</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Add Task -->
+                    <div class="card card-gradient">
+                        <div class="card-header">
+                            <div class="card-title">Quick Add Task</div>
+                            <div class="card-icon">⚡</div>
+                        </div>
+                        <form id="quickAddForm" class="quick-form">
+                            <div class="form-group">
+                                <input type="text" id="quickTaskInput" class="form-input form-input-focus" placeholder="Add a new task..." required>
+                            </div>
+                            <div class="form-row">
+                                <select id="quickPriority" class="form-select">
+                                    <option value="low">Low Priority</option>
+                                    <option value="medium" selected>Medium Priority</option>
+                                    <option value="high">High Priority</option>
+                                </select>
+                                <button type="submit" class="btn btn-primary btn-lg">Add Task</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Recent Tasks -->
+                <div class="card card-shadow">
+                    <div class="card-header">
+                        <div class="card-title">Recent Tasks</div>
+                        <button class="btn btn-secondary btn-sm" onclick="showTab('tasks')">View All →</button>
+                    </div>
+                    <div id="recentTasksList"></div>
+                </div>
+
+                <!-- Upcoming Schedule -->
+                <div class="card card-shadow">
+                    <div class="card-header">
+                        <div class="card-title">Upcoming Classes & Events</div>
+                        <button class="btn btn-secondary btn-sm" onclick="showTab('schedule')">View All →</button>
+                    </div>
+                    <div id="upcomingScheduleList"></div>
+                </div>
+            </section>
+
+            <!-- Tasks Tab -->
+            <section id="tasks" class="content-section">
+                <div class="grid grid-2">
+                    <div class="card card-form">
+                        <div class="card-header">
+                            <div class="card-title">Add New Task</div>
+                            <div class="card-icon">📝</div>
+                        </div>
+                        <form id="taskForm">
+                            <div class="form-group">
+                                <label>Task Title</label>
+                                <input type="text" id="taskTitle" class="form-input form-input-focus" placeholder="Enter task title" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea id="taskDescription" class="form-textarea form-input-focus" placeholder="Add task details..." rows="3"></textarea>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Subject/Course</label>
+                                    <input type="text" id="taskSubject" class="form-input form-input-focus" placeholder="e.g., Math, English">
+                                </div>
+                                <div class="form-group">
+                                    <label>Priority</label>
+                                    <select id="taskPriority" class="form-select">
+                                        <option value="low">Low</option>
+                                        <option value="medium" selected>Medium</option>
+                                        <option value="high">High</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Due Date</label>
+                                    <input type="date" id="taskDueDate" class="form-input form-input-focus">
+                                </div>
+                                <div class="form-group">
+                                    <label>Estimated Time</label>
+                                    <input type="number" id="taskTime" class="form-input form-input-focus" placeholder="Minutes" min="0">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Create Task</button>
+                        </form>
+                    </div>
+
+                    <div class="card card-filter">
+                        <div class="card-header">
+                            <div class="card-title">Task Filters</div>
+                            <div class="card-icon">🔍</div>
+                        </div>
+                        <div class="form-group">
+                            <label>Priority</label>
+                            <select id="filterPriority" class="form-select" onchange="filterTasks()">
+                                <option value="">All Priorities</option>
+                                <option value="high">High</option>
+                                <option value="medium">Medium</option>
+                                <option value="low">Low</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Status</label>
+                            <select id="filterStatus" class="form-select" onchange="filterTasks()">
+                                <option value="">All Tasks</option>
+                                <option value="completed">Completed</option>
+                                <option value="pending">Pending</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Subject</label>
+                            <input type="text" id="filterSubject" class="form-input form-input-focus" placeholder="Filter by subject..." onkeyup="filterTasks()">
+                        </div>
+                        <button class="btn btn-secondary btn-block" onclick="clearFilters()">Clear Filters</button>
+                    </div>
+                </div>
+
+                <div class="card card-tasks">
+                    <div class="card-header">
+                        <div class="card-title">All Tasks</div>
+                        <span class="task-count" id="taskCount">0</span>
+                    </div>
+                    <div id="tasksList"></div>
+                </div>
+            </section>
+
+            <!-- Schedule Tab -->
+            <section id="schedule" class="content-section">
+                <div class="grid grid-2">
+                    <div class="card card-form">
+                        <div class="card-header">
+                            <div class="card-title">Add Class / Event</div>
+                            <div class="card-icon">📅</div>
+                        </div>
+                        <form id="scheduleForm">
+                            <div class="form-group">
+                                <label>Title</label>
+                                <input type="text" id="scheduleTitle" class="form-input form-input-focus" placeholder="e.g., Math Lecture" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Subject</label>
+                                <input type="text" id="scheduleSubject" class="form-input form-input-focus" placeholder="e.g., Mathematics">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Date</label>
+                                    <input type="date" id="scheduleDate" class="form-input form-input-focus" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Time</label>
+                                    <input type="time" id="scheduleTime" class="form-input form-input-focus" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Duration (minutes)</label>
+                                <input type="number" id="scheduleDuration" class="form-input form-input-focus" placeholder="60" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label>Location</label>
+                                <input type="text" id="scheduleLocation" class="form-input form-input-focus" placeholder="Room/Building">
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Add Event</button>
+                        </form>
+                    </div>
+
+                    <div class="card card-filter">
+                        <div class="card-header">
+                            <div class="card-title">Schedule View</div>
+                            <div class="card-icon">📆</div>
+                        </div>
+                        <div class="form-group">
+                            <label>Filter by Date</label>
+                            <input type="date" id="scheduleFilterDate" class="form-input form-input-focus" onchange="filterSchedule()">
+                        </div>
+                        <button class="btn btn-secondary btn-block" onclick="document.getElementById('scheduleFilterDate').value = ''; filterSchedule();">
+                            Clear Filter
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card card-schedule">
+                    <div class="card-header">
+                        <div class="card-title">Schedule List</div>
+                        <span class="event-count" id="eventCount">0</span>
+                    </div>
+                    <div id="scheduleList"></div>
+                </div>
+            </section>
+
+            <!-- Goals Tab -->
+            <section id="goals" class="content-section">
+                <div class="grid grid-2">
+                    <div class="card card-form">
+                        <div class="card-header">
+                            <div class="card-title">Create Goal</div>
+                            <div class="card-icon">🎯</div>
+                        </div>
+                        <form id="goalForm">
+                            <div class="form-group">
+                                <label>Goal Title</label>
+                                <input type="text" id="goalTitle" class="form-input form-input-focus" placeholder="e.g., Get 90% in Math" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea id="goalDescription" class="form-textarea form-input-focus" placeholder="Why is this goal important?" rows="3"></textarea>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Category</label>
+                                    <select id="goalCategory" class="form-select">
+                                        <option value="academic">Academic</option>
+                                        <option value="personal">Personal</option>
+                                        <option value="health">Health</option>
+                                        <option value="skill">Skill Development</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Target Date</label>
+                                    <input type="date" id="goalDueDate" class="form-input form-input-focus" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Create Goal</button>
+                        </form>
+                    </div>
+
+                    <div class="card card-stats">
+                        <div class="card-header">
+                            <div class="card-title">Goal Statistics</div>
+                            <div class="card-icon">📊</div>
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stat-box stat-box-pink">
+                                <div class="stat-box-icon">🎯</div>
+                                <div class="stat-box-value" id="totalGoals">0</div>
+                                <div class="stat-box-label">Total Goals</div>
+                            </div>
+                            <div class="stat-box stat-box-green">
+                                <div class="stat-box-icon">✨</div>
+                                <div class="stat-box-value" id="completedGoals">0</div>
+                                <div class="stat-box-label">Completed</div>
+                            </div>
+                            <div class="stat-box stat-box-blue">
+                                <div class="stat-box-icon">🚀</div>
+                                <div class="stat-box-value" id="inProgressGoals">0</div>
+                                <div class="stat-box-label">In Progress</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-goals">
+                    <div class="card-header">
+                        <div class="card-title">Your Goals</div>
+                        <span class="goal-count" id="goalCount">0</span>
+                    </div>
+                    <div id="goalsList"></div>
+                </div>
+            </section>
+
+            <!-- Analytics Tab -->
+            <section id="analytics" class="content-section">
+                <div class="grid grid-2">
+                    <div class="card card-analytics">
+                        <div class="card-header">
+                            <div class="card-title">Weekly Statistics</div>
+                            <div class="card-icon">📊</div>
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stat-box stat-box-blue">
+                                <div class="stat-box-icon">✅</div>
+                                <div class="stat-box-value" id="weekTasksCompleted">0</div>
+                                <div class="stat-box-label">Completed</div>
+                            </div>
+                            <div class="stat-box stat-box-purple">
+                                <div class="stat-box-icon">⏱️</div>
+                                <div class="stat-box-value" id="weekTotalFocus">0h</div>
+                                <div class="stat-box-label">Focus Hours</div>
+                            </div>
+                            <div class="stat-box stat-box-green">
+                                <div class="stat-box-icon">🚀</div>
+                                <div class="stat-box-value" id="weekProductivity">0%</div>
+                                <div class="stat-box-label">Productivity</div>
+                            </div>
+                            <div class="stat-box stat-box-orange">
+                                <div class="stat-box-icon">📈</div>
+                                <div class="stat-box-value" id="weekAvgPerDay">0</div>
+                                <div class="stat-box-label">Daily Avg</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card card-analytics">
+                        <div class="card-header">
+                            <div class="card-title">Performance by Subject</div>
+                            <div class="card-icon">📚</div>
+                        </div>
+                        <div id="subjectStats" class="subject-stats"></div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="grid grid-2">
+                    <div class="card card-chart">
+                        <div class="card-header">
+                            <div class="card-title">Task Completion Rate</div>
+                            <div class="card-icon">📊</div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="completionChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="card card-chart">
+                        <div class="card-header">
+                            <div class="card-title">Priority Distribution</div>
+                            <div class="card-icon">⚡</div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="priorityChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-2">
+                    <div class="card card-chart">
+                        <div class="card-header">
+                            <div class="card-title">Tasks by Subject</div>
+                            <div class="card-icon">📚</div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="subjectChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="card card-chart">
+                        <div class="card-header">
+                            <div class="card-title">Task Status Overview</div>
+                            <div class="card-icon">✓</div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="statusChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-2">
+                    <div class="card card-analytics">
+                        <div class="card-header">
+                            <div class="card-title">Priority Breakdown</div>
+                            <div class="card-icon">⚡</div>
+                        </div>
+                        <div class="priority-chart">
+                            <div class="priority-item">
+                                <div class="priority-label">High Priority</div>
+                                <div class="priority-bar">
+                                    <div class="priority-fill priority-high" id="highPrior
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>StudyFlow © 2024 | Keep Productive, Stay Focused 🎯</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
