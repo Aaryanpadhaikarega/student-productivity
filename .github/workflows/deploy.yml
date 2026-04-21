@@ -1,11 +1,8 @@
 name: Deploy Static Content to Pages
 
 on:
-  # This ensures the workflow runs whenever you push to main
   push:
     branches: ["main"]
-
-  # This allows you to run it manually from the Actions tab
   workflow_dispatch:
 
 permissions:
@@ -16,6 +13,10 @@ permissions:
 concurrency:
   group: "pages"
   cancel-in-progress: false
+
+env:
+  # This removes the deprecation warning and uses the latest Node.js runner
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   deploy:
